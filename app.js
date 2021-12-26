@@ -27,7 +27,7 @@ app.use(
 
 //ROUTES
 app.get('/', async (req, res) => {
-  const posts = await Post.find({});
+  const posts = await Post.find({}).sort('-dateCreated');
   res.render('index', {
     posts,
   });
@@ -64,6 +64,11 @@ app.put('/posts/:id', async (req, res) => {
   post.detail = req.body.detail;
   post.save();
   res.redirect(`/posts/${req.params.id}`);
+});
+
+app.delete('/posts/:id', async (req, res) => {
+  await Post.findByIdAndRemove({ _id: req.params.id });
+  res.redirect('/');
 });
 
 const port = 3000;
